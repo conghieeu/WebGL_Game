@@ -1,0 +1,16 @@
+{
+"companyName": "DefaultCompany",
+"productName": "3DunityProgram",
+"productVersion": "0.1",
+"dataUrl": "WebGL_BoxMoving.data.unityweb",
+"wasmCodeUrl": "WebGL_BoxMoving.wasm.code.unityweb",
+"wasmFrameworkUrl": "WebGL_BoxMoving.wasm.framework.unityweb",
+"graphicsAPI": ["WebGL 2.0","WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20",
+"cacheControl": {"default": "must-revalidate"},
+"developmentBuild": true,
+"multithreading": false,
+"unityVersion": "2019.4.17f1"
+}
