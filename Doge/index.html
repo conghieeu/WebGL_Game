@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
+    <meta name="google-site-verification" content="k8B2z8FL-sU0BZY8hI8QNM5kW_eiDMQ2VOlwnCqD2Ao">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="images/logo.png" type="image" sizes="16x16">
+    <link rel="stylesheet" href="Style/main.css">
+
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Doge</title>
@@ -8,6 +14,16 @@
     <link rel="stylesheet" href="TemplateData/style.css">
   </head>
   <body>
+    <header>
+      <nav>
+        <ul class="topnav">
+          <li class="logo"><a href="https://conghieuz.github.io/ConghieuZ/"></a></li>
+          <li><a href="https://conghieuz.github.io/ConghieuZ/">HOME</a></li>
+          <li><a href="https://conghieuz.github.io/ConghieuZ/Pages/Games/Games.htm">GAMES</a></li>
+          <li><a href="https://conghieuz.github.io/ConghieuZ/Pages/Contact/Contact.htm">CONTACT</a></li>
+        </ul>
+      </nav>
+    </header>
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600></canvas>
       <div id="unity-loading-bar">
@@ -16,9 +32,7 @@
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
-      <div id="unity-mobile-warning">
-        WebGL builds are not supported on mobile devices.
-      </div>
+      <div id="unity-warning"> </div>
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
@@ -26,6 +40,37 @@
       </div>
     </div>
     <script>
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/Doge.loader.js";
       var config = {
@@ -36,14 +81,8 @@
         companyName: "Conghieu",
         productName: "Doge",
         productVersion: "1.0",
+        showBanner: unityShowBanner,
       };
-
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-      var mobileWarning = document.querySelector("#unity-mobile-warning");
 
       // By default Unity keeps WebGL canvas render target size matched with
       // the DOM size of the canvas element (scaled by window.devicePixelRatio)
@@ -57,10 +96,7 @@
         // Avoid draining fillrate performance on mobile devices,
         // and default/override low DPI mode on mobile browsers.
         config.devicePixelRatio = 1;
-        mobileWarning.style.display = "block";
-        setTimeout(() => {
-          mobileWarning.style.display = "none";
-        }, 5000);
+        unityShowBanner('WebGL builds are not supported on mobile devices.');
       } else {
         canvas.style.width = "960px";
         canvas.style.height = "600px";
